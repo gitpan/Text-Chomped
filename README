@@ -3,7 +3,7 @@ NAME
     chopped
 
 VERSION
-    Version 0.01
+    Version 0.02
 
 SYNOPSIS
         # Old way
@@ -38,6 +38,15 @@ DESCRIPTON
     Unfortunately subroutine prototyping in Perl cannot ape the builtin
     chomp/chop prototype, so you'll have to pass in an ARRAY reference if
     you want to chomp/chop a list
+
+    Another consequence of the above, is that we can't use $_ without making
+    the interface annoying, so you can't do:
+
+        map { chomped } "A\n", "b", "c\n"
+
+    You have to do:
+
+        map { chomped $_ } "A\n", "b", "c\n"
 
 ACKNOWLEDGEMENTS
                                       Y\     /Y

@@ -9,11 +9,11 @@ Text::Chomped - A chomp and chop that will return the chomped and chopped
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -49,19 +49,27 @@ what was cho[mp]ped off (the character)
 Unfortunately subroutine prototyping in Perl cannot ape the builtin chomp/chop prototype, so you'll have to pass in an ARRAY reference if you want to
 chomp/chop a list
 
+Another consequence of the above, is that we can't use C<$_> without making the interface annoying, so you can't do:
+
+    map { chomped } "A\n", "b", "c\n"
+
+You have to do:
+
+    map { chomped $_ } "A\n", "b", "c\n"
+
 =cut
 
 use vars qw/@ISA @EXPORT/;
 @ISA = qw/Exporter/;
 @EXPORT = qw/chomped chopped/;
 
-sub _chomped ($)  {
+sub _chomped {
     my $value = $_[0];
     chomp $value;
     return $value;
 }
 
-sub chomped ($)  {
+sub chomped ($) {
     my $value = $_[0];
     if ( ref $value eq 'ARRAY' ) {
         my @result = map { _chomped $_ } @$value;
@@ -72,7 +80,7 @@ sub chomped ($)  {
     }
 }
 
-sub _chopped ($)  {
+sub _chopped {
     my $value = $_[0];
     chop $value;
     return $value;
